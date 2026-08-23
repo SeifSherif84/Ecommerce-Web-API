@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Services.Mapping.Products
 {
     public class ProductPictureUrlResolver (IConfiguration configuration) : IValueResolver<Product, ProductResponse, string>

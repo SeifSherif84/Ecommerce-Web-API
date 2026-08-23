@@ -70,7 +70,7 @@ namespace Store.G02.Persistence.Repositories
 
         private IQueryable<TEntity> ApplySpecifications(ISpecifications<TKey, TEntity> specifications)
         {
-            return SpecificationsEvaluator.GenerateQuery(_context.Set<TEntity>(), specifications);
+            return SpecificationsEvaluator.GenerateQuery/*<TKey, TEntity>*/(_context.Set<TEntity>(), specifications);
         }
 
     }

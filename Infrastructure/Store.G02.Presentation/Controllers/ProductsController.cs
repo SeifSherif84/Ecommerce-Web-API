@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Store.G02.Shared.ErrorModels;
 using Store.G02.Presentation.Attributes;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Store.G02.Presentation.Controllers
 {
     [ApiController]
-    [Route("apis/[controller]")]
+    [Route("api/[controller]")]
     public class ProductsController (IServiceManager _serviceManager) : ControllerBase
     {
 
@@ -23,6 +24,7 @@ namespace Store.G02.Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDetails))]
         [Cache(60)]
+        [Authorize]
         public async Task<IActionResult> GetAllProducts([FromQuery] ProductQueryParameters Params)
         {
             var Products = await _serviceManager.productService.GetAllProductsAsync(Params);
@@ -37,6 +39,7 @@ namespace Store.G02.Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDetails))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetails))]
+        [Authorize]
         public async Task<IActionResult> GetProductById(int? id)
         {
             if(id is null)
@@ -72,6 +75,13 @@ namespace Store.G02.Presentation.Controllers
                 return BadRequest();
             return Ok(Types);
         }
+
+
+        #region UnderstandThing
+        //var lawyerId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get Value Directly From Identifier Claim
+        //var lawyerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier); // Get Claim As A Claim Object [Key]
+        //var lawyerId = lawyerIdClaim.Value; // Get Value From Claim Object 
+        #endregion
 
 
     }

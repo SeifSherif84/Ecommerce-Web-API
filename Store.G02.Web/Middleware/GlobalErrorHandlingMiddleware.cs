@@ -1,10 +1,12 @@
 ﻿using Store.G02.Domain.Exceptions.BadRequest;
 using Store.G02.Domain.Exceptions.NotFound;
+using Store.G02.Domain.Exceptions.UnauthorizedException;
 using Store.G02.Shared.ErrorModels;
+
 
 namespace Store.G02.Web.Middleware
 {
-    public class GlobalErrorHandlingMiddleware
+    public class GlobalErrorHandlingMiddleware 
     {
         private readonly RequestDelegate _next;
 
@@ -24,7 +26,7 @@ namespace Store.G02.Web.Middleware
                     var ResponseBody = new ErrorDetails()
                     {
                         StatusCode = context.Response.StatusCode,
-                        ErrorMessage = "This Route Not Match Any EndPoint In Server Side !"
+                        ErrorMessage = $"Route {context.Request.Path} Not Match Any EndPoint In Server Side !"
                     };
                     await context.Response.WriteAsJsonAsync(ResponseBody);
                 }
@@ -36,6 +38,7 @@ namespace Store.G02.Web.Middleware
                 {
                     NotFoundException => StatusCodes.Status404NotFound,
                     BadRequestException => StatusCodes.Status400BadRequest,
+                    UnauthorizedException => StatusCodes.Status401Unauthorized,
                     _ => StatusCodes.Status500InternalServerError
                 };
 
@@ -50,8 +53,6 @@ namespace Store.G02.Web.Middleware
                 await context.Response.WriteAsJsonAsync(ResponseBody);
             }
         }
-
-
 
     }
 }

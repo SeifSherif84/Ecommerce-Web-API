@@ -15,7 +15,10 @@ namespace Store.G02.Persistence.Repositories
 
         public async Task<string?> GetAsync(string key)
         {
-            var value = await _database.StringGetAsync(key);
+            var redisValue = await _database.StringGetAsync(key);
+            if (redisValue.IsNullOrEmpty) return null;
+            var value = JsonSerializer.Deserialize<string>(redisValue);
+            if (value is null) return null;
             return value;
         }
 
